@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LandingPageItBeep", "LandingPageItBeep\LandingPageItBeep.csproj", "{2DD83208-6BC4-489D-A0C0-98D971A8C281}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DD83208-6BC4-489D-A0C0-98D971A8C281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD83208-6BC4-489D-A0C0-98D971A8C281}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD83208-6BC4-489D-A0C0-98D971A8C281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD83208-6BC4-489D-A0C0-98D971A8C281}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1AE172C7-18E9-4BB8-B735-E61F3CB97426}
+	EndGlobalSection
+EndGlobal
