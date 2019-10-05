@@ -26,21 +26,22 @@ namespace LandingPageItBeep.Controllers
         }
 
         // GET: Lookups/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<Lookup> Details(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return null;
             }
 
             var lookup = await _context.Lookups
+                .Include(lookupCategories => lookupCategories.LookupCategories)
                 .FirstOrDefaultAsync(m => m.LookupID == id);
             if (lookup == null)
             {
-                return NotFound();
+                return new Lookup();
             }
 
-            return View(lookup);
+            return lookup;
         }
 
         // GET: Lookups/Create
