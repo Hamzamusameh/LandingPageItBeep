@@ -2,52 +2,154 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <div class="fadeIn first">
+            <img src="~/imgs/logo.png" id="icon" alt="Logo" />
+        </div>
+        <form>
+            <label class="control-label">الاسم</label>
+            <input type="text" id="txt-customer-name" class="fadeIn second" name="name">
+            <label class="control-label">الجوال</label>
+            <input type="text" id="txt-customer-mobile" class="fadeIn third" name="mobile">
+            <label class="control-label">البريد</label>
+            <input type="text" id="txt-customer-email" class="fadeIn third" name="email">
+            <button type="button" class="btn custom-send-btn" id="send-btn">
+                إرسال
+            </button>
+            <label id="send-error-lbl" class="custom-error-lbl">يجب ادخال الاسم والبريد الالكتروني</label>
+        </form>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.LookupName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LookupNameEn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CraetedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LookupName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LookupNameEn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CraetedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LookupID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LookupID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LookupID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="modal fade" id="offerLookupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body custom-model-body">
+                <h5 class="custom-body-title-h5"> اختر عرض من العروض التالية</h5>
+                <div class="custom-list-btns">
+                    @foreach (var item in Model)
+                    {
+                        if (item.LookupID == 1)
+                        {
+                            foreach (var i in item.LookupCategories)
+                            {
+                                <button type="button" class="custom-offer-btn" onclick="SetOfferOption(@i.LookupCategoryID)">@i.LookupName</button>
+                            }
+                        }
+                    }
+                </div>
+                <div class="text-align-center">
+                    <button type="button" id="next-btn" class="btn custom-send-btn">التالي</button>
+                    <label id="next-error-lbl" class="custom-error-lbl">يجب اختير العرض قبل الانتقال لاختيار الفترة</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="durationLookupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body custom-model-body">
+                <h5>هل ترغب برفع الطلب ؟</h5>
+                <div class="custom-list-btns">
+                    @foreach (var item in Model)
+                    {
+                        if (item.LookupID == 2)
+                        {
+                            foreach (var i in item.LookupCategories)
+                            {
+                                <button type="button" class="custom-offer-btn" onclick="SetDurationOption(@i.LookupCategoryID)">@i.LookupName</button>
+                            }
+                        }
+                    }
+                </div>
+                <div class="text-align-center">
+                    <button type="button" onclick="SendMail()" class="btn custom-send-btn">إنهاء</button>
+                    <label id="finish-error-lbl" class="custom-error-lbl">يجب اختيار الفترة</label>
+                    <label id="send-mail-error-lbl" class="custom-error-lbl">حدث خطأ في ارسال البريد الالكتروني</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var obj = {
+        Name:'',
+        Message: 'Hop',
+        Subject: 'Sex',
+        Receiver: '',
+        Offer: '',
+        Duration: ''
+    };
+
+    $("#send-btn").on("click", function () {
+        obj.Name = $("#txt-customer-name").val();
+        obj.Receiver = $("#txt-customer-email").val();
+        $(".send-error-lbl").hide();
+        if (!obj.Receiver)
+            $("#send-error-lbl").show();
+        else if (!obj.Name)
+            $("#send-error-lbl").show();
+        else
+            $("#offerLookupModal").modal('show');
+    });
+
+    $("#next-btn").on("click", function () {
+        $("#next-error-lbl").hide();
+        if (!obj.Offer)
+            $("#next-error-lbl").show();
+        else {
+            $("#offerLookupModal").modal('hide');
+            $("#durationLookupModal").modal('show');
+        }
+     });
+
+    function SetOfferOption(id) {
+        $("#next-error-lbl").hide();
+        if (id)
+            obj.Offer = id;
+    }
+
+    function SetDurationOption(id) {
+        $("#next-error-lbl").hide();
+        if (id)
+            obj.Duration = id;
+    }
+
+    function SendMail() {
+        $("#finsih-error-lbl").hide();
+        $("#send-mail-error-lbl").hide();
+        if (!obj.Duration)
+             $("#finsih-error-lbl").show();
+         else
+            $.ajax({
+                url: '@Url.Action("SendMail","Lookups")',
+                data: { email: obj },
+                method:"POST",
+                success: function (response) {
+                    $("#durationLookupModal").modal('hide');
+                     $("#offerLookupModal").modal('hide');
+                },
+                fail: function (response) {
+
+                     $("#send-mail-error-lbl").show();
+                }
+            });
+    }
+</script>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LandingPageItBeep.DAL;
 using LandingPageItBeep.Models;
+using LandingPageItBeep.Helpers;
 
 namespace LandingPageItBeep.Controllers
 {
@@ -22,7 +23,7 @@ namespace LandingPageItBeep.Controllers
         // GET: Lookups
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Lookups.ToListAsync());
+            return View(await _context.Lookups.Include(lookup => lookup.LookupCategories).ToListAsync());
         }
 
         // GET: Lookups/Details/5
@@ -149,6 +150,11 @@ namespace LandingPageItBeep.Controllers
         private bool LookupExists(int id)
         {
             return _context.Lookups.Any(e => e.LookupID == id);
+        }
+
+        public IActionResult SendMail(Email email)
+        {
+            return Ok(EmailSender.SendEmail(email));
         }
     }
 }
